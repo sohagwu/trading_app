@@ -1,41 +1,361 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Chart</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #131722;
-            overflow: hidden;
-        }
-        #tradingview_chart {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHROMA FORGE - Real Engine & UTC Signal Generator</title>
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: linear-gradient(145deg, #121824, #0b0f19);
+      --accent-green: #00ff87;
+      --accent-red: #ff0055;
+      --text: #ffffff;
+      --muted: #8b9bb4;
+      --border: rgba(255, 255, 255, 0.08);
+
+      --theme-color: #00e5ff;
+      --theme-glow: rgba(0, 229, 255, 0.25);
+      --theme-gradient: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(0, 114, 255, 0.05));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 15px;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .topbar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo-main {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #00e5ff, #60a5fa, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: rgba(255, 0, 85, 0.2);
+      color: var(--accent-red);
+      margin-top: 5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .status-badge.online {
+      background: rgba(0, 255, 135, 0.2);
+      color: var(--accent-green);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    select {
+      flex: 1;
+      background: #0d121d;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 10px;
+      outline: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .forge-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #00e5ff 0%, #0052d4 100%);
+      color: #ffffff;
+      font-weight: 800;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3);
+    }
+
+    #signalCard {
+      border: 1px solid var(--theme-color);
+      box-shadow: 0 0 30px var(--theme-glow);
+    }
+
+    .sticker {
+      text-align: center;
+      padding: 18px;
+      border-radius: 14px;
+      background: var(--theme-gradient);
+      border: 1px solid var(--theme-color);
+      margin-bottom: 15px;
+    }
+
+    .go-for {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--theme-color);
+      letter-spacing: 2px;
+    }
+
+    .big-text {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--theme-color);
+      margin: 4px 0;
+      letter-spacing: 3px;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .meta-item {
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .meta-item strong {
+      color: var(--text);
+    }
+
+    .copy-btn {
+      width: 100%;
+      background: var(--theme-color);
+      color: #000;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div id="tradingview_chart"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script type="text/javascript">
-        new TradingView.widget({
-            "autosize": true,
-            "symbol": "BINANCE:BTCUSDT",
-            "interval": "1",
-            "timezone": "Etc/UTC",
-            "theme": "dark",
-            "style": "1",
-            "locale": "en",
-            "toolbar_bg": "#f1f3f6",
-            "enable_publishing": false,
-            "allow_symbol_change": true,
-            "container_id": "tradingview_chart"
-        });
-    </script>
+
+  <div id="app">
+    <div class="topbar">
+      <div class="logo-main">CHROMA FORGE</div>
+      <div class="status-badge" id="serverStatus">PYTHON SERVER: OFFLINE</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Real Engine Signal Selector</div>
+      
+      <div class="row">
+        <select id="marketType" onchange="togglePairOptions()">
+          <option value="OTC">OTC MARKET</option>
+          <option value="REAL">REAL MARKET</option>
+        </select>
+
+        <select id="tf">
+          <option value="1 Min">1 Min</option>
+          <option value="5 Min">5 Min</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <select id="pair">
+          <!-- Populated by JS -->
+        </select>
+      </div>
+
+      <button class="forge-btn" onclick="getRealSignal()">GET REAL SIGNAL</button>
+    </div>
+
+    <!-- RESULT SECTION -->
+    <div id="result" style="display:none;">
+      <div class="card" id="signalCard">
+        <div class="sticker">
+          <div class="go-for" id="goFor">WAITING...</div>
+          <div class="big-text" id="bigText">WAIT</div>
+          <div class="brand-tag">Trading By Sohag</div>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-item">Entry (UTC+6) <strong id="r-utc6">00:00:00</strong></div>
+          <div class="meta-item">Entry (UTC+0) <strong id="r-utc0">00:00:00</strong></div>
+          <div class="meta-item">RSI Value <strong id="r-rsi">0.00</strong></div>
+          <div class="meta-item">Analysis <strong id="r-reason">Calculated</strong></div>
+        </div>
+
+        <button class="copy-btn" id="copyBtn" onclick="copySig()">Copy Signal</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      TRADING BY <span>SOHAG</span> • REAL ENGINE CONNECTED
+    </div>
+  </div>
+
+  <script>
+    let socket = null;
+    const realPairs = ["EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "USD/CAD", "EUR/GBP", "GBP/JPY", "EUR/JPY"];
+    const otcPairs = ["EUR/USD (OTC)", "GBP/USD (OTC)", "USD/JPY (OTC)", "AUD/CAD (OTC)", "USD/BDT (OTC)", "USD/INR (OTC)", "USD/PKR (OTC)"];
+
+    function togglePairOptions() {
+      const type = document.getElementById('marketType').value;
+      const pairSelect = document.getElementById('pair');
+      pairSelect.innerHTML = '';
+      const list = (type === 'OTC') ? otcPairs : realPairs;
+      list.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        pairSelect.appendChild(opt);
+      });
+    }
+    togglePairOptions();
+
+    function connectWebSocket() {
+      socket = new WebSocket('ws://localhost:8765');
+
+      socket.onopen = () => {
+        const st = document.getElementById('serverStatus');
+        st.textContent = "PYTHON SERVER: ONLINE";
+        st.classList.add('online');
+      };
+
+      socket.onclose = () => {
+        const st = document.getElementById('serverStatus');
+        st.textContent = "PYTHON SERVER: OFFLINE";
+        st.classList.remove('online');
+        setTimeout(connectWebSocket, 3000); // Reconnect loop
+      };
+
+      socket.onmessage = (event) => {
+        const res = JSON.parse(event.data);
+        displaySignal(res);
+      };
+    }
+
+    connectWebSocket();
+
+    function getRealSignal() {
+      const pairSelected = document.getElementById('pair').value;
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(JSON.stringify({ action: 'ANALYZE', pair: pairSelected }));
+      } else {
+        alert('Termux-এ পাইথন সার্ভারটি চালু নেই! আগে Termux-এ python server.py রান করুন।');
+      }
+    }
+
+    function displaySignal(data) {
+      const dir = data.dir || 'WAIT';
+      const goText = (dir === 'BUY') ? 'GO FOR UP ▲' : (dir === 'SELL' ? 'GO FOR DOWN ▼' : 'WAIT FOR CONFIRMATION');
+      
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 1);
+      now.setSeconds(0);
+      const utc6 = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Dhaka' });
+      const utc0 = now.toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+
+      document.getElementById('goFor').textContent = goText;
+      document.getElementById('bigText').textContent = dir;
+      document.getElementById('r-utc6').textContent = utc6;
+      document.getElementById('r-utc0').textContent = utc0;
+      document.getElementById('r-rsi').textContent = data.rsi || 'N/A';
+      document.getElementById('r-reason').textContent = data.reason || 'Calculated';
+
+      const root = document.documentElement;
+      if (dir === 'BUY') {
+        root.style.setProperty('--theme-color', '#00ff87');
+        root.style.setProperty('--theme-glow', 'rgba(0, 255, 135, 0.35)');
+      } else if (dir === 'SELL') {
+        root.style.setProperty('--theme-color', '#ff0055');
+        root.style.setProperty('--theme-glow', 'rgba(255, 0, 85, 0.35)');
+      } else {
+        root.style.setProperty('--theme-color', '#00e5ff');
+        root.style.setProperty('--theme-glow', 'rgba(0, 229, 255, 0.25)');
+      }
+
+      document.getElementById('result').style.display = 'block';
+    }
+
+    function copySig() {
+      const pair = document.getElementById('pair').value;
+      const dir = document.getElementById('bigText').textContent;
+      const tf = document.getElementById('tf').value;
+      const utc6 = document.getElementById('r-utc6').textContent;
+      const utc0 = document.getElementById('r-utc0').textContent;
+      const rsi = document.getElementById('r-rsi').textContent;
+
+      const txt = `⚡ CHROMA FORGE REAL SIGNAL\n------------------------------\nPair      : ${pair}\nDirection : ${dir}\nTimeframe : ${tf}\nRSI (14)  : ${rsi}\nEntry BD  : ${utc6} (UTC+6)\nEntry UTC : ${utc0} (UTC+0)\nRule      : Enter at 00s candle open\n------------------------------\nTrading by Sohag`;
+
+      navigator.clipboard.writeText(txt).then(() => {
+        const b = document.getElementById('copyBtn');
+        b.textContent = '✓ Copied!';
+        setTimeout(() => { b.textContent = 'Copy Signal'; }, 1700);
+      });
+    }
+  </script>
 </body>
 </html>
