@@ -12,21 +12,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Trading Signal App',
+      title: 'CHROMA FORGE',
       theme: ThemeData.dark(),
-      home: const TradingScreen(),
+      home: const SignalScreen(),
     );
   }
 }
 
-class TradingScreen extends StatefulWidget {
-  const TradingScreen({super.key});
+class SignalScreen extends StatefulWidget {
+  const SignalScreen({super.key});
 
   @override
-  State<TradingScreen> createState() => _TradingScreenState();
+  State<SignalScreen> createState() => _SignalScreenState();
 }
 
-class _TradingScreenState extends State<TradingScreen> {
+class _SignalScreenState extends State<SignalScreen> {
   late final WebViewController _controller;
 
   @override
@@ -34,18 +34,18 @@ class _TradingScreenState extends State<TradingScreen> {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..loadRequest(
-        Uri.parse('https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=BINANCE:BTCUSDT&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=F1F3F6&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC'),
-      );
+      ..loadFlutterAsset('assets/index.html');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF07090E),
       appBar: AppBar(
-        title: const Text('Trading Chart'),
+        title: const Text('CHROMA FORGE SIGNAL'),
         centerTitle: true,
+        backgroundColor: const Color(0xFF07090E),
+        elevation: 0,
       ),
       body: WebViewWidget(controller: _controller),
     );
