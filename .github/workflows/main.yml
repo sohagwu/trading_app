@@ -27,6 +27,7 @@ jobs:
       - name: Recreate Android Project Structure
         run: |
           flutter create --platforms=android --project-name trading_app .
+          sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
 
       - name: Install Dependencies
         run: flutter pub get
