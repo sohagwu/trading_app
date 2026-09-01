@@ -34,7 +34,10 @@ class _TradingScreenState extends State<TradingScreen> {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadFlutterAsset('assets/index.html');
+      ..setBackgroundColor(const Color(0x00000000))
+      ..loadRequest(
+        Uri.parse('https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=BINANCE:BTCUSDT&interval=1&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=F1F3F6&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC'),
+      );
   }
 
   @override
